@@ -4,11 +4,9 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const { getUsers, createUser, verifyUser } = require("../consultas.js");
 require("dotenv").config();
+const { checkCredentiaslMiddleware, reportMiddleware } = require("../middlewares/middleware.js")
 
-const reportMiddleware = (req, res, next) => {
-    console.log("El cliente ha realizado una consulta al servidor");
-    next();
-}
+
 
 router.use(express.json());
 router.use(cors())
@@ -23,7 +21,7 @@ router.get("/usuarios", async (req, res) => {
     }
 })
 
-router.post("/usuarios", async (req, res) => {
+router.post("/usuarios", checkCredentiaslMiddleware, async (req, res) => {
     try {
         const user = req.body;
         const { email, password, rol, lenguage } = user;
