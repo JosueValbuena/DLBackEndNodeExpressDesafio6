@@ -19,12 +19,9 @@ const createUser = async (email, password, rol, lenguage) => {
 const verifyUser = async (email, password) => {
     const values = [email];
     const query = "SELECT * FROM usuarios WHERE email = $1";
-
     const { rows: [usuario], rowCount } = await pool.query(query, values);
-
     const { password: passwordEcripted } = usuario;
     const passwordValided = bcrypt.compareSync(password, passwordEcripted);
-
     if (!passwordValided || !rowCount)
         throw { code: 401, message: "email o contrasenha incorrecta" };
 }
